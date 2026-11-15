@@ -1,0 +1,106 @@
+/* Theme tokens. Change the look of the whole site from here. */
+
+/* Self-hosted so visitors' IPs don't go to Google.
+   shortcut: latin subset only (Latin-1 + punctuation), add latin-ext files if text needs other scripts. */
+@font-face {
+  font-family: 'Anton';
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/anton-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter Tight';
+  font-weight: 800;
+  font-display: swap;
+  src: url('./fonts/inter-tight-800-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-weight: 400 500; /* variable font */
+  font-display: swap;
+  src: url('./fonts/jetbrains-mono-latin.woff2') format('woff2');
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Colors */
+  --color-bg: #000;
+  --color-fg: #f1ece3;
+  --color-fg-muted: #9b948a;
+  --color-accent: #e3a548;
+  --color-border: #2b2825;
+  --color-scrim: rgb(11 10 9 / 0.94);
+  --color-button: rgb(11 10 9 / 0.6); /* lightbox buttons over the photo */
+  --color-button-hover: rgba(255, 255, 255, 0.32);
+  --shadow-text: 0px 0px 20px #49413d;
+
+  /* Light pillar background (hex or rgb only, read by WebGL) */
+  --color-pillar-top: #ff4d1a;
+  --color-pillar-bottom: #ffd166;
+  --bg-opacity: 1;
+
+  /* Typography */
+  --font-display: 'Inter Tight', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-title: 'Anton', 'Impact', sans-serif;
+  /* Sizes are fluid between multiples of the 4px unit. */
+  --text-label: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem); /* 12 to 14px */
+  --text-headline: clamp(2.25rem, 1rem + 3.6vw, 5rem); /* 36 to 80px */
+  --text-title: clamp(4rem, min(15vw, 20svh), 17rem); /* 64 to 272px */
+  --text-title-mobile: min(34vw, 16svh); /* two lines */
+  --leading: calc(1em + 0.5rem);
+  --leading-title: 0.85;
+  --weight-headline: 800;
+  --tracking-headline: -0.03em;
+  --word-spacing-headline: 0.08em;
+  --tracking-label: 0.18em;
+
+  /* Spacing: multiples of the 4px base unit */
+  --unit: 0.25rem;
+  --space-2xs: var(--unit); /* 4px */
+  --space-xs: calc(var(--unit) * 2); /* 8px */
+  --space-sm: calc(var(--unit) * 4); /* 16px */
+  --space-md: calc(var(--unit) * 6); /* 24px */
+  --space-lg: calc(var(--unit) * 12); /* 48px */
+  --space-xl: calc(var(--unit) * 24); /* 96px */
+
+  /* Layout */
+  --story-length: 450vh; /* intro (half a screen) + one full camera turn */
+  --camera-size: min(40vw, 76vh);
+  --camera-size-mobile: min(92vw, 44svh);
+  --camera-hero-size: min(80vw, 90svh); /* camera width in the hero */
+  --camera-hero-size-mobile: min(92vw, 60svh);
+  --title-offset: -0.3; /* title position above the camera, x hero size */
+  --title-offset-mobile: -0.27;
+  --headline-width: 14ch;
+  --tap-size: calc(var(--unit) * 11); /* 44px */
+
+  /* Motion */
+  --duration-text: 700ms;
+  --duration-intro: 1100ms;
+  --duration-fade: 240ms;
+  --duration-close: 380ms;
+  --duration-hint: 3s; /* lightbox arrows on touch screens */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* Set per element so 1em is that element's own font size. */
+  line-height: var(--leading);
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
