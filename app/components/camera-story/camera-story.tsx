@@ -1,5 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import BlurText from '../blur-text/blur-text';
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties
+} from 'react';
 import LightPillar from '../light-pillar/light-pillar';
 import type { CameraFrame } from '../../content';
 import { cssVar } from '../../utils/css-var';
@@ -131,18 +136,23 @@ export default function CameraStory({
                 key={text}
                 className={`story__line${i === line ? ' is-active' : ''}`}
               >
-                {/* Remounts on activation to replay the focus pull. Inactive
-                    lines use trigger 'hover' only to render settled text
-                    while the wrapper fades out. */}
-                <BlurText
-                  key={i === line ? 'in' : 'out'}
-                  text={text}
-                  effect='focus'
-                  trigger={i === line ? 'load' : 'hover'}
-                  delay={90}
-                  stepDuration={0.6}
-                  blur={12}
-                />
+                {/* Words come into focus one by one when the line turns
+                    active (CSS animation on .is-active). */}
+                <p>
+                  {text.split(' ').map((word, w) => (
+                    // Words are positional within a fixed text.
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Fragment key={w}>
+                      {w > 0 && ' '}
+                      <span
+                        className='story__word'
+                        style={{ '--i': w } as CSSProperties}
+                      >
+                        {word}
+                      </span>
+                    </Fragment>
+                  ))}
+                </p>
               </div>
             ))}
           </div>

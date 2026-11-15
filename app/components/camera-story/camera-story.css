@@ -164,6 +164,24 @@
   margin: 0;
 }
 
+.story__word {
+  display: inline-block;
+}
+
+/* Focus pull: each word sharpens in turn, 90ms after the one before. */
+.story__line.is-active .story__word {
+  animation: story-focus 1.2s cubic-bezier(0.65, 0, 0.35, 1)
+    calc(var(--i) * 90ms) both;
+}
+
+@keyframes story-focus {
+  from {
+    filter: blur(16.8px);
+    opacity: 0.32;
+    transform: scale(1.12);
+  }
+}
+
 .story__line.is-active {
   opacity: 1;
   transform: none;
@@ -230,6 +248,10 @@
     transition: none;
     transform: none;
     filter: none;
+  }
+
+  .story__line.is-active .story__word {
+    animation: none;
   }
 
   .story__stage {
