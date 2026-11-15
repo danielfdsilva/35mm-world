@@ -26,11 +26,91 @@
 
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#000000">
+
+  <!-- Styles the static fallback below before the app's CSS loads. Colors
+       and fonts mirror app/styles/theme.css. -->
+  <style>
+    html {
+      background: #000;
+      color: #f1ece3;
+    }
+
+    .boot {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      text-align: center;
+      font: 0.75rem/1.5 'JetBrains Mono', ui-monospace, monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9b948a;
+      /* Fades in late, so fast loads never flash it. */
+      animation: boot-in 0.6s ease-out 0.4s both;
+    }
+
+    .boot h1 {
+      margin: 0;
+      font: 400 clamp(4rem, 15vw, 10rem)/0.85 Anton, Impact, sans-serif;
+      letter-spacing: 0;
+      color: #f1ece3;
+    }
+
+    .boot p {
+      max-width: 32rem;
+      margin: 0;
+    }
+
+    .boot a {
+      color: #f1ece3;
+      text-underline-offset: 0.25rem;
+    }
+
+    /* Loading bar: a short light sweeping along a hairline. */
+    .boot::after {
+      content: '';
+      width: 8rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e3a548, transparent) 0 0 / 50% 100% no-repeat #2b2825;
+      animation: boot-sweep 1.4s ease-in-out infinite;
+    }
+
+    @keyframes boot-in {
+      from {
+        opacity: 0;
+      }
+    }
+
+    @keyframes boot-sweep {
+      from {
+        background-position: -100% 0;
+      }
+      to {
+        background-position: 200% 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .boot,
+      .boot::after {
+        animation: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
   <div id='app-container'>
-    <!-- Content rendered here via React -->
+    <!-- Static fallback for crawlers that don't run JavaScript. React
+         replaces it on render. -->
+    <div class='boot'>
+      <h1>%VITE_APP_TITLE%</h1>
+      <p>%VITE_APP_DESCRIPTION%</p>
+      <p>A project by <a href="https://danielfdsilva.com/">Daniel da Silva</a></p>
+    </div>
   </div>
 
   <script>
