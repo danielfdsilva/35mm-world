@@ -1,0 +1,238 @@
+/* Registered so the intro can transition between 0 and 1. */
+@property --intro {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.story {
+  position: relative;
+  height: var(--story-length);
+}
+
+.story__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: var(--space-lg);
+  /* Less on short (landscape phone) screens. */
+  padding: clamp(var(--space-md), 10svh, var(--space-xl)) var(--space-lg);
+
+  /* --intro runs 0 (hero) to 1 (camera at its side). The rest is set from
+     JS on resize. */
+  --intro: 0;
+  transition: --intro var(--duration-intro) var(--ease-in-out);
+  --camera-dx: 0px;
+  --camera-dy: 0px;
+  --camera-scale: 1;
+  --hero: calc(1 - var(--intro));
+}
+
+.story__stage.is-started {
+  --intro: 1;
+}
+
+.story__bg {
+  opacity: var(--bg-opacity);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+
+/* Darkens the background behind the text so the headline stays readable. */
+.story__stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--color-bg) 0%, transparent 65%);
+  opacity: calc(0.85 * var(--intro));
+  pointer-events: none;
+}
+
+/* Hero: the title sits above the camera, its lower edge tucked behind it. */
+.story__hero {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.story__hero > * {
+  grid-area: 1 / 1;
+}
+
+.story__hero-spot {
+  width: var(--camera-hero-size);
+  aspect-ratio: 1;
+}
+
+.story__title {
+  margin: 0;
+  text-shadow: var(--shadow-text);
+  font-family: var(--font-title);
+  font-size: var(--text-title);
+  font-weight: 400;
+  line-height: var(--leading-title);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  /* -50% puts the bottom edge at the hero center, whatever the line count. */
+  translate: 0
+    calc(
+      var(--camera-hero-size) * var(--title-offset) - 50% - var(--intro) * 15svh
+    );
+  opacity: calc(1 - var(--intro) * 1.6);
+  filter: blur(calc(var(--intro) * 16px));
+}
+/* Small link at the bottom of the hero screen, gone once the story starts. */
+.story__skip {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  translate: -50% 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--tap-size);
+  padding: 0 var(--space-sm);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: var(--shadow-text);
+  color: var(--color-fg);
+  opacity: calc(1 - var(--intro) * 2);
+  pointer-events: auto;
+  transition:
+    visibility var(--duration-intro),
+    color 160ms ease-in-out;
+}
+
+@media (hover: hover) {
+  .story__skip:hover {
+    color: var(--color-accent);
+  }
+}
+
+.story__skip:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: var(--space-2xs);
+}
+
+.story__stage.is-started .story__skip {
+  visibility: hidden;
+}
+
+.story__text {
+  position: relative;
+  z-index: 1;
+  text-shadow: var(--shadow-text);
+  opacity: calc(var(--intro) * 2);
+  display: grid;
+  gap: var(--space-md);
+}
+
+.story__lines {
+  display: grid;
+}
+
+.story__line {
+  grid-area: 1 / 1;
+  max-width: var(--headline-width);
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  font-weight: var(--weight-headline);
+  letter-spacing: var(--tracking-headline);
+  word-spacing: var(--word-spacing-headline);
+  opacity: 0;
+  transform: translateY(-0.3em);
+  filter: blur(8px);
+  pointer-events: none;
+  transition:
+    opacity var(--duration-text) var(--ease-out),
+    transform var(--duration-text) var(--ease-out),
+    filter var(--duration-text) var(--ease-out);
+}
+
+.story__line p {
+  margin: 0;
+}
+
+.story__line.is-active {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition: none;
+}
+
+/* Explicit z-index: on small screens `order` would paint it under the
+   background. */
+.story__camera {
+  position: relative;
+  z-index: 2;
+  justify-self: center;
+  width: var(--camera-size);
+  height: var(--camera-size);
+  transform: translate(
+      calc(var(--camera-dx) * var(--hero)),
+      calc(var(--camera-dy) * var(--hero))
+    )
+    scale(calc(1 + (var(--camera-scale) - 1) * var(--hero)));
+  will-change: transform;
+  pointer-events: none; /* its box covers the skip link in the hero */
+}
+
+/* Stacked layout for portrait phones; landscape ones keep side by side. */
+@media (max-width: 899px) and (orientation: portrait) {
+  .story__stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    gap: var(--space-xl);
+    padding: var(--space-lg) var(--space-md);
+    --camera-hero-size: var(--camera-hero-size-mobile);
+    --title-offset: var(--title-offset-mobile);
+  }
+
+  /* Moves the camera down by half the title height so title and camera sit
+     centered together. Padding, not translate: JS measures the spot with
+     offsetTop. */
+  .story__hero {
+    padding-top: calc(var(--text-title-mobile) * 1.4 * var(--leading-title));
+  }
+
+  /* One word per line so it can be bigger. */
+  .story__title {
+    width: min-content;
+    font-size: var(--text-title-mobile);
+    white-space: normal;
+  }
+
+  .story__stage::before {
+    background: linear-gradient(to top, var(--color-bg) 0%, transparent 70%);
+  }
+
+  .story__camera {
+    order: -1;
+    width: var(--camera-size-mobile);
+    height: var(--camera-size-mobile);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story__line {
+    transition: none;
+    transform: none;
+    filter: none;
+  }
+
+  .story__stage {
+    transition: none;
+  }
+}
