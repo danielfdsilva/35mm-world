@@ -1,0 +1,247 @@
+.wall {
+  height: 100vh;
+  height: 100svh;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.footer a {
+  color: var(--color-fg);
+  text-underline-offset: var(--space-2xs);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer span {
+  width: 50%;
+}
+
+.footer .site {
+  text-align: right;
+}
+
+html:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+.lightbox {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  /* Less on short (landscape phone) screens. */
+  --lightbox-pad-y: clamp(var(--space-sm), 8svh, var(--space-lg));
+  /* No side padding: the bands sit on the screen edges. */
+  padding: var(--lightbox-pad-y) 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-fg);
+  outline: none;
+  touch-action: pinch-zoom;
+}
+
+.lightbox[open] {
+  display: grid;
+  place-items: center;
+  animation: lightbox-in var(--duration-fade) var(--ease-out);
+}
+
+.lightbox::backdrop {
+  background: var(--color-scrim);
+  animation: lightbox-fade var(--duration-fade) var(--ease-out);
+}
+
+.lightbox__figure {
+  /* Full width, photo in the middle column. Clicks beside the photo fall
+     through to the dialog and close it. */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  row-gap: var(--space-sm);
+  width: 100%;
+  margin: 0;
+  pointer-events: none;
+}
+
+.lightbox__figure > * {
+  pointer-events: auto;
+}
+
+.lightbox__image {
+  grid-area: 1 / 2;
+  display: block;
+  max-width: calc(100vw - 2 * var(--space-md));
+  /* Room left for the caption line below. */
+  max-height: calc(100svh - 2 * var(--lightbox-pad-y) - var(--space-lg));
+  object-fit: contain;
+}
+
+/* The small wall image stands in until the full one loads. Stretched to the
+   max box (object-fit keeps its shape) so the swap doesn't change its size. */
+.lightbox__image.is-preview {
+  width: 100vw;
+}
+
+.lightbox__info {
+  /* As wide as the photo, never wider: long captions wrap. */
+  width: 0;
+  min-width: 100%;
+  grid-area: 2 / 2;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.lightbox.is-closing,
+.lightbox.is-closing::backdrop {
+  animation: lightbox-out var(--duration-close) var(--ease-in-out) forwards;
+}
+
+.lightbox__image,
+.lightbox__info {
+  animation: lightbox-fade var(--duration-fade) var(--ease-out);
+}
+
+.lightbox__button {
+  position: fixed;
+  display: grid;
+  place-items: center;
+  width: var(--tap-size);
+  height: var(--tap-size);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-button);
+  color: var(--color-fg);
+  cursor: pointer;
+  transition:
+    color var(--duration-fade) var(--ease-out),
+    background-color var(--duration-fade) var(--ease-out);
+}
+
+/* Only real hover: on touch screens a tapped button would stay lit. */
+@media (hover: hover) {
+  .lightbox__button:hover {
+    background: var(--color-button-hover);
+    color: var(--color-bg);
+  }
+}
+
+.lightbox__button:focus-visible,
+.lightbox__band:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: var(--space-2xs);
+}
+
+.lightbox__close {
+  top: var(--space-md);
+  right: var(--space-md);
+}
+
+.lightbox__band {
+  /* Spans the photo's row, pinned to a screen edge, as tall as the photo.
+     Narrow screens: a quarter each. */
+  grid-row: 1;
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+  width: min(calc(50 * var(--unit)), 25%);
+  padding: 0;
+  border: 0;
+  background: var(--color-button);
+  color: var(--color-fg);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--duration-fade) var(--ease-out);
+}
+
+.lightbox__prev {
+  justify-self: start;
+}
+
+.lightbox__next {
+  justify-self: end;
+}
+
+.lightbox__band:focus-visible {
+  opacity: 1;
+  /* Inside, so the screen edge doesn't clip it. */
+  outline-offset: calc(-1 * var(--space-2xs));
+}
+
+/* Only real hover: on touch screens a tapped band would stay lit. */
+@media (hover: hover) {
+  .lightbox__band:hover {
+    opacity: 1;
+  }
+}
+
+/* Touch screens: the bands show for a moment on open to say there is more,
+   then fade out but stay tappable. */
+@media (hover: none) {
+  .lightbox__band {
+    animation: lightbox-hint var(--duration-hint) var(--ease-out);
+  }
+}
+
+@keyframes lightbox-out {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes lightbox-hint {
+  0%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox[open],
+  .lightbox::backdrop,
+  .lightbox__image,
+  .lightbox__info {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
