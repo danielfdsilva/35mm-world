@@ -42,15 +42,17 @@ const seoFiles = (baseUrl: string): Plugin => ({
 });
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => ({
-  plugins: [
-    react(),
-    seoFiles(loadEnv(mode, process.cwd()).VITE_BASE_URL ?? '')
-  ],
-  server: {
-    port: 9000
-  },
-  resolve: {
-    alias
-  }
-}));
+export default defineConfig(({ command, mode }) => {
+  const baseUrl = loadEnv(mode, process.cwd()).VITE_BASE_URL ?? '';
+  return {
+    // Full URL so built module and asset URLs are absolute.
+    base: command === 'build' && baseUrl ? `${baseUrl}/` : '/',
+    plugins: [react(), seoFiles(baseUrl)],
+    server: {
+      port: 9000
+    },
+    resolve: {
+      alias
+    }
+  };
+});

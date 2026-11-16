@@ -1,6 +1,6 @@
 # 35mm World
 
-35mm film photography, shot on my father's Yashica FX-3 Super 2000 after years forgotten in a closet. Every frame is real film.
+35mm film photography, shot on my father's Yashica FX-3 Super 2000 after being forgotten in a closet for years. Every frame is real film.
 
 ## Installation and Usage
 
@@ -43,13 +43,11 @@ To configure the application:
 npm run dev
 ```
 
-Compiles the sass files, javascript, and launches the server making the site available at `http://localhost:9000/`
-The system will watch files and execute tasks whenever one of them changes.
-The site will automatically refresh since it is bundled with livereload.
+Compiles the site, and launches the server making the site available at `http://localhost:9000/`
 
 ### Images
 
-Source images are large, so they live outside the app in `.resources/` (git ignored) and are never modified. `scripts/optimize-images.sh` turns them into web-ready WebP files:
+Source images are large, so they are not tracked. `scripts/optimize-images.sh` turns them into web-ready WebP files:
 
 - `<name>-750.webp` for normal screens and `<name>-1500.webp` for retina (2x) screens.
 - `<name>-lqip.webp`, a 96px wide placeholder. It is small enough for Vite to inline in the bundle, so it shows instantly while the full image loads on slow networks.
@@ -69,8 +67,6 @@ npm run images:photos
 ```
 
 Each folder in `.resources/photos/` is one roll, named `<YYYY.MM> - <film> <ISO>` (for example `2026.06 - Kodak Gold 200`). The site reads the date, film and ISO from that name. Every photo gets a `<name>-800.webp` for the photo wall and a `<name>-2048.webp` for the lightbox, in `app/media/photos/<roll>/`. Folders with any other name are skipped.
-
-Neither script removes old outputs. Delete the output folder first when you remove or rename source images.
 
 Run the script directly for other images or settings:
 
