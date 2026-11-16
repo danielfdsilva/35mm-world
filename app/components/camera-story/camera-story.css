@@ -92,7 +92,7 @@
   opacity: calc(1 - var(--intro) * 1.6);
   filter: blur(calc(var(--intro) * 16px));
 }
-/* Small link at the bottom of the hero screen, gone once the story starts. */
+/* Small link at the bottom of the screen, there until the photos scroll in. */
 .story__skip {
   position: absolute;
   bottom: var(--space-md);
@@ -109,11 +109,8 @@
   text-decoration: none;
   text-shadow: var(--shadow-text);
   color: var(--color-fg);
-  opacity: calc(1 - var(--intro) * 2);
   pointer-events: auto;
-  transition:
-    visibility var(--duration-intro),
-    color 160ms ease-in-out;
+  transition: color 160ms ease-in-out;
 }
 
 @media (hover: hover) {
@@ -125,10 +122,6 @@
 .story__skip:focus-visible {
   outline: 1px solid var(--color-accent);
   outline-offset: var(--space-2xs);
-}
-
-.story__stage.is-started .story__skip {
-  visibility: hidden;
 }
 
 .story__text {
