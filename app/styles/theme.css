@@ -69,9 +69,13 @@
 
   /* Layout */
   --story-length: 450vh; /* intro (half a screen) + one full camera turn */
-  --camera-size: min(40vw, 76vh);
+  /* The camera is one square canvas. Its box is always --camera-size; in the
+     hero, JS scales it up to --camera-hero-size and moves it to the hero
+     spot, and the intro shrinks it back. The two sizes are independent.
+     -mobile values apply to portrait phones (camera above the text). */
+  --camera-size: min(40vw, 76vh); /* in the story, beside the text */
   --camera-size-mobile: min(92vw, 44svh);
-  --camera-hero-size: min(80vw, 90svh); /* camera width in the hero */
+  --camera-hero-size: min(80vw, 90svh); /* in the hero, before scrolling */
   --camera-hero-size-mobile: min(92vw, 60svh);
   --title-overlap: 0.2; /* share of the hero camera the title tucks behind */
   --headline-width: 14ch;
