@@ -59,6 +59,7 @@
    JS measures both, and the camera transform goes from one to the other
    with --intro. */
 .story__hero {
+  padding-top: 10svh;
   position: absolute;
   z-index: 1;
   inset: 0;
@@ -203,6 +204,10 @@
 
 /* Stacked layout for portrait phones; landscape ones keep side by side. */
 @media (max-width: 899px) and (orientation: portrait) {
+  .story__hero {
+    padding-top: 0vh;
+  }
+
   .story__stage {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto;

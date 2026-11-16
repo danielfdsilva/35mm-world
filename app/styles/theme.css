@@ -73,9 +73,9 @@
      hero, JS scales it up to --camera-hero-size and moves it to the hero
      spot, and the intro shrinks it back. The two sizes are independent.
      -mobile values apply to portrait phones (camera above the text). */
-  --camera-size: min(40vw, 76vh); /* in the story, beside the text */
+  --camera-size: min(35vw, 76vh); /* in the story, beside the text */
   --camera-size-mobile: min(92vw, 44svh);
-  --camera-hero-size: min(80vw, 90svh); /* in the hero, before scrolling */
+  --camera-hero-size: min(75vw, 75svh); /* in the hero, before scrolling */
   --camera-hero-size-mobile: min(92vw, 60svh);
   --title-overlap: 0.2; /* share of the hero camera the title tucks behind */
   --headline-width: 14ch;
