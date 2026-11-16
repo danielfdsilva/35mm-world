@@ -52,21 +52,25 @@
   pointer-events: none;
 }
 
-/* Hero: the title sits above the camera, its lower edge tucked behind it. */
+/* Camera position, in two places:
+   - Hero: the title stacked on .story__hero-spot, centered together on
+     screen. Sized by --camera-hero-size, overlap set by --title-overlap.
+   - Story: the camera's own cell in the stage grid.
+   JS measures both, and the camera transform goes from one to the other
+   with --intro. */
 .story__hero {
   position: absolute;
   z-index: 1;
   inset: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
 }
 
-.story__hero > * {
-  grid-area: 1 / 1;
-}
-
 .story__hero-spot {
+  flex: none;
   width: var(--camera-hero-size);
   aspect-ratio: 1;
 }
@@ -82,11 +86,9 @@
   text-transform: uppercase;
   text-align: center;
   white-space: nowrap;
-  /* -50% puts the bottom edge at the hero center, whatever the line count. */
-  translate: 0
-    calc(
-      var(--camera-hero-size) * var(--title-offset) - 50% - var(--intro) * 15svh
-    );
+  /* Lower edge tucked behind the camera. */
+  margin-bottom: calc(var(--camera-hero-size) * var(--title-overlap) * -1);
+  translate: 0 calc(var(--intro) * -15svh);
   opacity: calc(1 - var(--intro) * 1.6);
   filter: blur(calc(var(--intro) * 16px));
 }
@@ -215,14 +217,6 @@
     gap: var(--space-xl);
     padding: var(--space-lg) var(--space-md);
     --camera-hero-size: var(--camera-hero-size-mobile);
-    --title-offset: var(--title-offset-mobile);
-  }
-
-  /* Moves the camera down by half the title height so title and camera sit
-     centered together. Padding, not translate: JS measures the spot with
-     offsetTop. */
-  .story__hero {
-    padding-top: calc(var(--text-title-mobile) * 1.4 * var(--leading-title));
   }
 
   /* One word per line so it can be bigger. */

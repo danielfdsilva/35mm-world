@@ -73,8 +73,7 @@
   --camera-size-mobile: min(92vw, 44svh);
   --camera-hero-size: min(80vw, 90svh); /* camera width in the hero */
   --camera-hero-size-mobile: min(92vw, 60svh);
-  --title-offset: -0.3; /* title position above the camera, x hero size */
-  --title-offset-mobile: -0.27;
+  --title-overlap: 0.2; /* share of the hero camera the title tucks behind */
   --headline-width: 14ch;
   --tap-size: calc(var(--unit) * 11); /* 44px */
 
