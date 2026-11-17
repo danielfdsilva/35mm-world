@@ -74,6 +74,12 @@ export default function CameraStory({
       canvas.width = canvas.offsetWidth * scale;
       canvas.height = canvas.offsetHeight * scale;
       player.draw();
+
+      // Touch snap points: the hero, then the middle of each line's scroll.
+      const { startAt, scrollable } = lengths();
+      section.querySelectorAll<HTMLElement>('.story__snap').forEach((el, i) => {
+        el.style.top = `${i && startAt + ((i - 0.5) / lines.length) * (scrollable - startAt)}px`;
+      });
     };
 
     const update = () => {
@@ -118,6 +124,10 @@ export default function CameraStory({
 
   return (
     <section ref={sectionRef} className='story' aria-label='Story'>
+      {[-1, ...lines].map((_, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div key={i} className='story__snap' aria-hidden='true' />
+      ))}
       <div ref={stageRef} className='story__stage'>
         <LightPillar
           className='story__bg'

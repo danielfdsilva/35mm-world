@@ -15,6 +15,24 @@
   color: var(--color-fg-muted);
 }
 
+/* Touch only: one swipe moves one story line (snap points in camera-story).
+   The wall and footer are snap points too, since mandatory snapping needs
+   somewhere to land after the story. */
+@media (hover: none) and (pointer: coarse) {
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
+  .wall {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .footer {
+    scroll-snap-align: end;
+  }
+}
+
 .footer a {
   color: var(--color-fg);
   text-underline-offset: var(--space-2xs);

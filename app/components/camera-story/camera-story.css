@@ -10,6 +10,21 @@
   height: var(--story-length);
 }
 
+/* Touch snap points, placed from JS. Snapping is on in app.css. */
+.story__snap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .story__snap {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
 .story__stage {
   position: sticky;
   top: 0;
