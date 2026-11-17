@@ -41,6 +41,17 @@ export default function CameraStory({
     const player = createFramePlayer(canvas, frames);
     let raf = 0;
 
+    // Scroll distances in px: intro (half a screen), the point where the first
+    // line shows, and the whole sticky run.
+    const lengths = () => {
+      const introLength = window.innerHeight / 2;
+      return {
+        introLength,
+        startAt: introLength * 0.2,
+        scrollable: section.offsetHeight - window.innerHeight
+      };
+    };
+
     // Measures how far the camera travels from the hero spot to its place in
     // the layout. offset* values ignore the CSS transform on the canvas.
     const resize = () => {
@@ -67,21 +78,22 @@ export default function CameraStory({
 
     const update = () => {
       raf = 0;
-      const rect = section.getBoundingClientRect();
-      const scrolled = -rect.top;
-      const { intro, story } = storyProgress(
-        scrolled,
-        rect.height - window.innerHeight,
-        window.innerHeight / 2
-      );
+      const scrolled = -section.getBoundingClientRect().top;
+      const { introLength, startAt, scrollable } = lengths();
+      const { intro, story } = storyProgress(scrolled, scrollable, introLength);
       // A little scroll plays the intro on its own timing (title out, camera
       // to its place); the turn starts once the intro distance is scrolled.
       // Scrolling back to the top plays it in reverse.
       const started = intro > 0.2;
       stage.classList.toggle('is-started', started);
-      const idx = storyIndexes(story, frames.length, lines.length);
-      player.show(idx.frame);
-      setLine(started ? idx.line : -1);
+      player.show(storyIndexes(story, frames.length, lines.length).frame);
+      // Lines count from when the first one shows, so each gets equal scroll.
+      const lineProgress = storyProgress(scrolled, scrollable, startAt).story;
+      setLine(
+        started
+          ? storyIndexes(lineProgress, frames.length, lines.length).line
+          : -1
+      );
     };
 
     const onScroll = () => {
