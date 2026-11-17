@@ -42,6 +42,9 @@
   cursor: pointer;
   transform-origin: 50% 50%;
   will-change: transform;
+  /* Plane, columns and tracks are coplanar with the tiles in 3D, so hit
+     testing could pick them over a tile and swallow the click. */
+  pointer-events: none;
 }
 
 .drift-wall__col {
@@ -65,6 +68,7 @@
   flex: 0 0 auto;
   outline: none;
   transform-style: preserve-3d;
+  pointer-events: auto;
 }
 
 .drift-wall__inner {
